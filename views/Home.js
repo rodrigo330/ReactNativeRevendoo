@@ -49,7 +49,7 @@ export default function Home({ navigation }) {
         </View>
         <View style={[styles.Row, { flex: 2 }]}>
           <View style={[styles.ButtonWrapper]}>
-            <TouchableOpacity style={[styles.SubButton, styles.Button]}>
+            <TouchableOpacity style={[styles.SubButton, styles.Button]} onPress={() => navigation.navigate("Catalogo")}>
               <View>
                 <Text style={[styles.ButtonTittle, styles.ButtonMainTittle]}>
                   CATÁLOGOS
