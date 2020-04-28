@@ -5,12 +5,15 @@ import {
   Text,
   StyleSheet,
   Switch,
-  TouchableOpacity,
   Button,
-  Image
+  ScrollView
 } from "react-native";
 
+import { AuthContext } from "../Context";
+
 export default function RegisterEmail({ navigation }) {
+  const { signUp } = React.useContext(AuthContext);
+
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -132,10 +135,11 @@ export default function RegisterEmail({ navigation }) {
         console.log(JSON.stringify(response)); // Will show you the status
         console.log(response.status); // Will show you the status
         if (response.ok) {
+          console.log("registrado com sucesso");
+          navigation.push("Login");
           setErrosForm(prevState => {
             return { ...prevState, responseError: "" };
           });
-          throw new Error("HTTP status " + response.status);
         } else {
           setErrosForm(prevState => {
             return { ...prevState, responseError: "Erro no sistema" };
@@ -147,108 +151,110 @@ export default function RegisterEmail({ navigation }) {
 
   return (
     <View style={[styles.MainDiv]}>
-      <Text>{JSON.stringify(form)}</Text>
-      <Text>{errosForm.responseError}</Text>
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="Nome Completo"
-        errorMessage={errosForm.nomeCompleto}
-        onChangeText={text => {
-          const val = text;
-          setForm(prevState => {
-            return { ...prevState, nomeCompleto: val };
-          });
-        }}
-      />
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="CPF"
-        errorMessage={errosForm.cpf}
-        onChangeText={text => {
-          const val = text;
-          setForm(prevState => {
-            return { ...prevState, cpf: val };
-          });
-        }}
-      />
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="Telefone"
-        errorMessage={errosForm.telefone}
-        onChangeText={text => {
-          const val = text;
-          setForm(prevState => {
-            return { ...prevState, telefone: val };
-          });
-        }}
-      />
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="E-mail"
-        errorMessage={errosForm.username}
-        onChangeText={text => {
-          const val = text;
-          setEmailForm(prevState => {
-            return { ...prevState, email: val };
-          });
-        }}
-      />
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="Confirme email"
-        errorMessage={errosForm.emailConfirm}
-        onChangeText={text => {
-          const val = text;
-          setEmailForm(prevState => {
-            return { ...prevState, emailConfirm: val };
-          });
-        }}
-      />
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="Senha"
-        errorMessage={errosForm.password}
-        onChangeText={text => {
-          const val = text;
-          setSenhaForm(prevState => {
-            return { ...prevState, password: val };
-          });
-        }}
-      />
-      <Text>
-        Crie uma senha com no minimo 4 caracteres, ela será solicitada sempre
-        que acessar seu APP.
-      </Text>
-      <Input
-        containerStyle={[styles.Input]}
-        placeholder="Confirme senha"
-        errorMessage={errosForm.passwordConfirm}
-        onChangeText={text => {
-          const val = text;
-          setSenhaForm(prevState => {
-            return { ...prevState, passwordConfirm: val };
-          });
-        }}
-      />
-      <View style={[styles.Row, { flex: 2 }]}>
-        <View style={[styles.SwitchContainer, styles.Row]}>
-          <View style={[styles.SwitchButtonContainer]}>
-            <Switch
-              trackColor={{ false: "#F0F0F0", true: "#81b0ff" }}
-              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
-          <View style={[styles.SwitchTextContainer]}>
-            <Text>Li e aceito os Termos de Uso</Text>
+      <ScrollView >
+        <Text>{JSON.stringify(form)}</Text>
+        <Text>{errosForm.responseError}</Text>
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="Nome Completo"
+          errorMessage={errosForm.nomeCompleto}
+          onChangeText={text => {
+            const val = text;
+            setForm(prevState => {
+              return { ...prevState, nomeCompleto: val };
+            });
+          }}
+        />
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="CPF"
+          errorMessage={errosForm.cpf}
+          onChangeText={text => {
+            const val = text;
+            setForm(prevState => {
+              return { ...prevState, cpf: val };
+            });
+          }}
+        />
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="Telefone"
+          errorMessage={errosForm.telefone}
+          onChangeText={text => {
+            const val = text;
+            setForm(prevState => {
+              return { ...prevState, telefone: val };
+            });
+          }}
+        />
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="E-mail"
+          errorMessage={errosForm.username}
+          onChangeText={text => {
+            const val = text;
+            setEmailForm(prevState => {
+              return { ...prevState, email: val };
+            });
+          }}
+        />
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="Confirme email"
+          errorMessage={errosForm.emailConfirm}
+          onChangeText={text => {
+            const val = text;
+            setEmailForm(prevState => {
+              return { ...prevState, emailConfirm: val };
+            });
+          }}
+        />
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="Senha"
+          errorMessage={errosForm.password}
+          onChangeText={text => {
+            const val = text;
+            setSenhaForm(prevState => {
+              return { ...prevState, password: val };
+            });
+          }}
+        />
+        <Text>
+          Crie uma senha com no minimo 4 caracteres, ela será solicitada sempre
+          que acessar seu APP.
+        </Text>
+        <Input
+          containerStyle={[styles.Input]}
+          placeholder="Confirme senha"
+          errorMessage={errosForm.passwordConfirm}
+          onChangeText={text => {
+            const val = text;
+            setSenhaForm(prevState => {
+              return { ...prevState, passwordConfirm: val };
+            });
+          }}
+        />
+        <View style={[styles.Row, { flex: 2 }]}>
+          <View style={[styles.SwitchContainer, styles.Row]}>
+            <View style={[styles.SwitchButtonContainer]}>
+              <Switch
+                trackColor={{ false: "#F0F0F0", true: "#81b0ff" }}
+                thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+            <View style={[styles.SwitchTextContainer]}>
+              <Text>Li e aceito os Termos de Uso</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={[styles.Button]}>
-        <Button title="CRIE SUA CONTA" color="#0000be" onPress={cadastrar} />
-      </View>
+        <View style={[styles.Button]}>
+          <Button title="CRIE SUA CONTA" color="#0000be" onPress={cadastrar} />
+        </View>
+      </ScrollView>
     </View>
   );
 }

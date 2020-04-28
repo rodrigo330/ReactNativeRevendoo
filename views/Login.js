@@ -1,33 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "react-native-elements";
+import axios from 'axios';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Button,
-  Image
+  Image,
+  AsyncStorage
 } from "react-native";
 
+import { AuthContext } from "../Context";
+
 export default function Login({ navigation }) {
+  const { signIn } = React.useContext(AuthContext);
+
   const [count, setCount] = useState();
   const [loginInfo, setLoginInfo] = useState({
     username: "",
     password: ""
   });
+
+  const _storeData = async (key,value) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (error) {
+      // Error saving data
+    }
+  }
+
+  const _retrieveData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      console.log(value);
+      return value;
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
   const login = () => {
-    fetch("https://localhost:5001/api/auth/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(loginInfo)
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        setCount(responseJson); // your JSON response is here
-      });
+    axios.post("https://localhost:5001/api/auth/login", loginInfo).then(function (response) {
+      if(response.status === 200){
+        _storeData('token', JSON.stringify(response.data.token));
+        _retrieveData('token');
+        signIn();
+      }else{
+        setCount("asdf");
+      }
+    });
   };
 
   return (
@@ -73,10 +95,10 @@ export default function Login({ navigation }) {
           <Button title="ENTRAR" color="#0000be" onPress={login} />
         </View>
         <View style={[styles.Button]}>
-          <Button title="ESQUECI MINHA SENHA" color="#0000be" onPress={login} />
+          <Button title="ESQUECI MINHA SENHA" color="#0000be" onPress={function ()  {_storeData("token", true)} }/>
         </View>
         <View style={[styles.Button]}>
-          <Button title="CADASTRAR COM E-MAIL" color="#0000be" onPress={login} />
+          <Button title="CADASTRAR COM E-MAIL" color="#0000be" onPress={function ()  {_storeData("token", false)}} />
         </View>
       </View>
       <View style={{ flex: 4 }}></View>
@@ -90,7 +112,6 @@ const styles = StyleSheet.create({
     flexDirection: "column"
   },
   Button: {
-    flex: 1,
-    marginTop: 70
+    marginTop: 15
   }
 });

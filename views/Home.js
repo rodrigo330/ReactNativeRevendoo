@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
+import { AuthContext } from "../Context";
 
 export default function Home({ navigation }) {
+  const { signOut } = React.useContext(AuthContext);
   return (
     <View style={[styles.Column]}>
       <View style={{ flex: 1 }}></View>
@@ -74,7 +76,18 @@ export default function Home({ navigation }) {
           </View>
         </View>
       </View>
-      <View style={{ flex: 1 }}></View>
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity style={[styles.MainButton, styles.Button]} onPress={() => signOut()}>
+          <View>
+            <Text style={[styles.ButtonTittle, styles.ButtonMainTittle]}>
+             signOut
+            </Text>
+            <Text style={[styles.ButtonTittle, styles.ButtonSubTittle]}>
+              botao signOut temporario
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
